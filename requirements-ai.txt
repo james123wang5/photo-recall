@@ -1,0 +1,13 @@
+torch==2.14.1
+transformers==5.19.0
+safetensors==0.8.0
+huggingface-hub==2.2.0
+
+# Local object detection for numeric constraints (AGPL-3.0 model/code).
+ultralytics==8.4.175
+opencv-python==4.11.0.86
+torchvision==0.29.1
+
+# Shared local image preprocessing, no CUDA requirement.
+qwen-vl-utils==0.0.14
+accelerate==1.15.0

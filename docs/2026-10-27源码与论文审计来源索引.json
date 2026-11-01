@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-27",
+  "method": "Static inspection of pinned public Git commits; no competitor inference benchmark was run.",
+  "repositories": [
+    {
+      "url": "https://github.com/allenv0/SCM",
+      "commit": "3833216610aeb77c2c1488b7b6ebab745a1c9ef7",
+      "files": [
+        "indexer/models.ts",
+        "indexer/indexer.ts",
+        "main.ts",
+        "main-lib/rank-search.ts",
+        "main-lib/llm/models.ts",
+        "main/ipc/llm-ask.ts",
+        "src/hooks/useMemorySearch.ts"
+      ]
+    },
+    {
+      "url": "https://github.com/julyx10/lap",
+      "commit": "6c14b183e2ce5bf1035f57fad790ced706b342f4",
+      "files": [
+        "scripts/download_models.sh",
+        "src-tauri/src/t_ai.rs",
+        "src-tauri/src/t_sqlite.rs",
+        "src-tauri/src/t_cmds.rs",
+        "src-vite/src/components/ImageSearch.vue"
+      ]
+    }
+  ],
+  "public_extraction": [
+    {
+      "url": "https://github.com/Saehyung-Lee/PlugIR",
+      "http_status": 200,
+      "characters": 14199
+    },
+    {
+      "url": "https://github.com/QwenLM/Qwen3-VL-Embedding",
+      "http_status": 200,
+      "characters": 38883
+    },
+    {
+      "url": "https://github.com/bingqingzhang/umivr",
+      "http_status": 200,
+      "characters": 15627
+    },
+    {
+      "url": "https://arxiv.org/html/2602.10809v1",
+      "http_status": 403,
+      "characters": 138
+    },
+    {
+      "url": "https://aclanthology.org/2024.acl-long.46/",
+      "http_status": 200,
+      "characters": 6148
+    },
+    {
+      "url": "https://arxiv.org/html/2610.02831v1",
+      "http_status": 403,
+      "characters": 138
+    },
+    {
+      "url": "https://negbench.github.io/",
+      "http_status": 200,
+      "characters": 2402
+    }
+  ],
+  "fallback": "Built-in web reader used for arXiv full text after Lightpanda received HTTP 403."
+}

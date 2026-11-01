@@ -1,0 +1,14 @@
+[
+  {
+    "file": "qwen3_vl_embedding.py",
+    "source": "https://github.com/QwenLM/Qwen3-VL-Embedding/blob/main/src/models/qwen3_vl_embedding.py",
+    "original_sha256": "0e447b6a80e05527f3fd437ab4f1617a6e7d0df102b8164348bbce787a41b267",
+    "changes": "processor local_files_only; wrapper selects device and pixel budget"
+  },
+  {
+    "file": "qwen3_vl_reranker.py",
+    "source": "https://github.com/QwenLM/Qwen3-VL-Embedding/blob/main/src/models/qwen3_vl_reranker.py",
+    "original_sha256": "7f55d5598d0e93585dcd9de7cad522756bb9eed7b1e783a66f8d53a1f7f47e6c",
+    "changes": "processor local_files_only; wrapper selects device and pixel budget"
+  }
+]

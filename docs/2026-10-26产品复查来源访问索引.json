@@ -1,0 +1,210 @@
+{
+  "date": "2026-10-26",
+  "sources": [
+    {
+      "url": "https://x.com/tylerangert/status/2036275247809470926",
+      "http_status": 200,
+      "extracted_characters": 5055,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://x.com/nathanbenaich/status/2042200143869399392",
+      "http_status": 200,
+      "extracted_characters": 2759,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://mazzzystar.com/two-years-of-an-ai-photo-album-search-app-zh",
+      "http_status": 200,
+      "extracted_characters": 10975,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://www.reddit.com/r/artificial/comments/1r9adr8/i_built_a_free_local_ai_image_search_app_find/",
+      "http_status": 200,
+      "extracted_characters": 0,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://github.com/allenv0/SCM",
+      "http_status": 200,
+      "extracted_characters": 16370,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://scm.allenlee.site/",
+      "http_status": 200,
+      "extracted_characters": 1098,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://github.com/Ubaida-M-Yusuf/Makimus-AI",
+      "http_status": 200,
+      "extracted_characters": 29140,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://news.ycombinator.com/item?id=34686947",
+      "http_status": 200,
+      "extracted_characters": 88906,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://news.ycombinator.com/item?id=40371467",
+      "http_status": 200,
+      "extracted_characters": 100724,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://angles.app/",
+      "http_status": 200,
+      "extracted_characters": 425,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://news.ycombinator.com/item?id=49952111",
+      "http_status": 200,
+      "extracted_characters": 45836,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://x.com/RhysSullivan/status/2114535506566639806",
+      "http_status": 200,
+      "extracted_characters": 4234,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://x.com/tylerangert/status/2092697753759477960",
+      "http_status": 200,
+      "extracted_characters": 3057,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://www.instagram.com/reel/DbEWdTAKi_V/",
+      "http_status": 0,
+      "extracted_characters": 0,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://github.com/julyx10/lap",
+      "http_status": 200,
+      "extracted_characters": 28170,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://github.com/Abhash-Chakraborty/Find",
+      "http_status": 200,
+      "extracted_characters": 50581,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://www.blackvoid.club/synology-deep-search-on-device-local-ai-application/",
+      "http_status": 200,
+      "extracted_characters": 14982,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://shotkit.com/best-ai-photo-search-tool/",
+      "http_status": 200,
+      "extracted_characters": 36391,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://zvec.org/en/blog/2026-06-22-zvec-mobile/",
+      "http_status": 0,
+      "extracted_characters": 0,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://www.facebook.com/seguridadentured/posts/lap-private-local-photo-manageropen-source-local-photo-manager-with-ai-search-fe/1678723790930156/",
+      "http_status": 200,
+      "extracted_characters": 543,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://www.facebook.com/excire/posts/find-organize-and-manage-your-lightroom-library-faster-with-excire-search-2026se/1574582784713359/",
+      "http_status": 200,
+      "extracted_characters": 507,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://excire.com/en/excire-foto/",
+      "http_status": 200,
+      "extracted_characters": 11809,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=h1xEYWxB7kw",
+      "http_status": 200,
+      "extracted_characters": 324,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://www.instagram.com/reel/DdrgCB3iOSj/",
+      "http_status": 200,
+      "extracted_characters": 11526,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://rps.org/news/bristol/2026/october-2026/here-s-what-rps-members-thought-of-excire-foto-2027/",
+      "http_status": 200,
+      "extracted_characters": 23824,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://www.ephotozine.com/article/excire-foto-2027-review-37575",
+      "http_status": 403,
+      "extracted_characters": 0,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://amateurphotographer.com/review/excire-foto-2027-review-get-on-top-of-even-the-most-disorganised-photo-collection/",
+      "http_status": 200,
+      "extracted_characters": 59275,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://gregbenzphotography.com/photography-reviews/find-anything-in-lightroom-with-peakto-ai-search/",
+      "http_status": 403,
+      "extracted_characters": 0,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://github.com/RUC-NLPIR/DeepImageSearch",
+      "http_status": 200,
+      "extracted_characters": 23233,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://github.com/wnlfc/AMBER",
+      "http_status": 200,
+      "extracted_characters": 13868,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://www.synology.com/en-us/products/deep-search",
+      "http_status": 200,
+      "extracted_characters": 716,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://www.instagram.com/reel/DbEWdTAKi_V/",
+      "http_status": 200,
+      "extracted_characters": 0,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://support.google.com/photos/answer/15318661?hl=en",
+      "http_status": 200,
+      "extracted_characters": 8265,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    },
+    {
+      "url": "https://cyme.io/en/products/peakto/features/conversational-search/",
+      "http_status": 200,
+      "extracted_characters": 20988,
+      "note": "HTTP 200 and text length do not establish completeness, independent validation, or watched video."
+    }
+  ],
+  "scope": "Public extraction metadata only. Browser observations and evidentiary limits are recorded in the Markdown report."
+}

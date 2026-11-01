@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>PhotoRecall · 找回记忆里的照片</title>
+    <link rel="stylesheet" href="/static/flow.css?v=20261027" />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <a class="brand" href="/">◈ PhotoRecall</a>
+      <p class="muted">从一点记忆，找到那张照片。</p>
+      <h2>照片库</h2>
+      <nav id="libraries"></nav>
+      <button id="add-library">＋ 添加本地文件夹</button>
+      <div class="sidebar-bottom">
+        <p>照片保留在原处，本地处理。</p>
+        <button id="settings-open">设置与模型</button
+        ><a href="/legacy">打开旧版界面 ↗</a>
+      </div>
+    </aside>
+    <main>
+      <header>
+        <div>
+          <p class="eyebrow">YOUR PRIVATE PHOTO ARCHIVE</p>
+          <h1 id="library-name">让记忆，重新清晰。</h1>
+        </div>
+        <div class="row">
+          <button id="scan">更新文件</button
+          ><button id="index-open">建立搜索索引</button>
+        </div>
+      </header>
+      <section class="search-box">
+        <form id="search-form">
+          <label for="query">你还记得什么？</label
+          ><textarea
+            id="query"
+            rows="2"
+            maxlength="2000"
+            placeholder="比如：生日蛋糕前双手合十的那张，可能是在去年……"
+          ></textarea>
+          <div class="row">
+            <select id="task-mode" aria-label="搜索目标">
+              <option value="find_one">找那一张</option>
+              <option value="set">找相关的一组</option>
+              <option value="all">尽量找齐全部</option></select
+            ><button type="button" id="new-search">清空线索</button
+            ><button class="primary" type="submit" id="send">
+              搜索 / 补充线索
+            </button>
+          </div>
+        </form>
+        <div id="conditions" class="chips"></div>
+        <div id="reference" class="muted"></div>
+      </section>
+      <section id="job" class="panel" hidden></section>
+      <section id="progress" class="panel" aria-live="polite" hidden>
+        <strong id="stage"></strong>
+        <p id="coverage"></p>
+        <p id="stop-reason" class="muted"></p>
+        <div class="row">
+          <button id="pause">暂停</button><button id="continue">继续处理</button
+          ><button id="recover">这批还没找到，继续找</button
+          ><button id="retry">重试失败项</button
+          ><button id="apply" hidden>有新结果，点击更新</button>
+        </div>
+      </section>
+      <div id="warnings" class="muted" role="status"></div>
+      <section class="results-heading">
+        <div>
+          <h2>照片</h2>
+          <span id="result-count" class="muted"></span>
+        </div>
+        <div class="row">
+          <select id="result-filter" aria-label="结果范围">
+            <option value="all">所有相关候选</option>
+            <option value="supported">逐项核对较符合</option>
+            <option value="unreviewed">尚未核对</option>
+            <option value="unknown">无法判断</option>
+            <option value="conflict">发现条件冲突</option>
+            <option value="error">处理失败</option></select
+          ><button id="previous">上一页</button><span id="page"></span
+          ><button id="next">下一页</button>
+        </div>
+      </section>
+      <section id="gallery" class="gallery" aria-label="照片结果"></section>
+      <p id="empty" class="empty">
+        先添加或选择一个照片文件夹，再描述你记得的画面。
+      </p>
+      <details id="history">
+        <summary>本轮查找过程</summary>
+        <div id="actions"></div>
+        <button id="export-run">保存本轮记录</button>
+      </details>
+      <footer>
+        相关程度、条件核验与扫描范围分别记录。没有找到不代表图库不存在。
+      </footer>
+    </main>
+    <dialog id="photo-dialog">
+      <div class="dialog-heading">
+        <h2 id="photo-title"></h2>
+        <button data-close>关闭</button>
+      </div>
+      <p class="muted">
+        需要指定局部时，在照片上拖动框选；参考图的其他属性不会自动成为条件。
+      </p>
+      <div id="photo-wrap">
+        <img id="photo-image" alt="原图预览" />
+        <div id="crop-box" hidden></div>
+      </div>
+      <div id="photo-evidence"></div>
+      <div class="row">
+        <button id="reference-photo">参考这张继续找</button
+        ><button id="reference-crop">参考框选局部</button
+        ><button id="inspect-photo">核对这张</button
+        ><button id="exclude-photo">不是这张</button
+        ><a id="original" target="_blank" rel="noopener">打开原图 ↗</a>
+      </div>
+    </dialog>
+    <dialog id="index-dialog">
+      <div class="dialog-heading">
+        <h2>建立搜索索引</h2>
+        <button data-close>关闭</button>
+      </div>
+      <p>
+        先更新文件，再按需要建立以下信息。已有有效结果会复用；暂停后可继续。
+      </p>
+      <label
+        ><input type="checkbox" name="component" value="visual" checked />
+        图像与局部线索</label
+      ><label
+        ><input type="checkbox" name="component" value="ocr" /> 照片文字</label
+      ><label
+        ><input type="checkbox" name="component" value="description" />
+        画面描述与描述搜索</label
+      ><label
+        ><input type="checkbox" name="component" value="people" />
+        人物相似聚类（需先启用人物组件）</label
+      ><button id="index-start" class="primary">开始所选步骤</button>
+      <pre id="index-coverage"></pre>
+    </dialog>
+    <dialog id="settings-dialog">
+      <div class="dialog-heading">
+        <h2>设置与模型</h2>
+        <button data-close>关闭</button>
+      </div>
+      <p>设置用于下一轮新搜索，当前任务继续使用它创建时的配置。</p>
+      <form id="settings-form">
+        <label
+          >主召回<select id="primary-model">
+            <option value="wemm">现有 WeMM</option>
+            <option value="qwen">Qwen3-VL-Embedding-2B</option>
+          </select></label
+        ><label
+          >相关性精排<select id="reranker-model">
+            <option value="core">现有 CORE</option>
+            <option value="qwen">Qwen3-VL-Reranker-2B</option>
+          </select></label
+        ><label
+          >本地视觉模型<input
+            id="vision-model"
+            value="qwen3-vl:4b-instruct" /></label
+        ><label
+          ><input id="planner-enabled" type="checkbox" /> 自动整理线索</label
+        ><label
+          ><input id="auto-verify" type="checkbox" /> 按需核对少量原图</label
+        ><label
+          ><input id="auto-rerank" type="checkbox" /> 启用小批相关性精排</label
+        ><label
+          ><input id="grounding-enabled" type="checkbox" />
+          启用本地对象定位组件</label
+        ><label
+          ><input id="people-enabled" type="checkbox" /> 启用本地人物组件</label
+        ><label
+          >每轮核验张数<input
+            id="verify-budget"
+            type="number"
+            min="0"
+            max="32" /></label
+        ><label
+          >每轮深入处理预算（秒）<input
+            id="time-slice"
+            type="number"
+            min="5"
+            max="600" /></label
+        ><button class="primary">保存设置</button>
+      </form>
+      <pre id="model-status"></pre>
+      <button id="people-open">查看人物分组</button>
+      <div id="people-list"></div>
+    </dialog>
+    <div id="toast" role="status" hidden></div>
+    <script src="/static/flow.js?v=20261027" defer></script>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+# Install only for the selected optional components; no models are downloaded.
+# Qwen official reranker helper imports scipy.
+scipy>=1.10,<2
+# Optional local face grouping. Upstream buffalo_l weights have research-use terms.
+insightface>=0.7,<1
+onnxruntime>=1.17,<2

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PhotoRecall · 找回记忆里的照片</title>
+  <meta name="color-scheme" content="light dark">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('photorecall-theme')||'light';document.documentElement.dataset.density=localStorage.getItem('photorecall-density')||'comfortable';}catch{}</script>
+  <link rel="stylesheet" href="/static/style.css?v=20261016-matches-5">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/" aria-label="PhotoRecall 首页"><span class="brandmark"><i></i><i></i><i></i><i></i></span><span>PhotoRecall<small>YOUR PRIVATE PHOTO ARCHIVE</small></span></a>
+    <div class="sidebar-label">照片库 <span id="library-total" class="library-total"></span> <button class="icon-button" id="add-library" aria-label="添加照片文件夹">＋</button></div>
+    <nav id="library-list" aria-label="照片库"></nav>
+    <button class="folder-button" id="folder-button"><span data-icon="folder"></span>添加本地文件夹</button>
+    <div class="sidebar-note"><span data-icon="lock"></span><div><strong>只属于你的记忆</strong><p>本地运行，照片不上传。</p></div></div>
+    <div class="sidebar-bottom"><button id="settings-button"><span data-icon="sliders"></span>设置与索引</button><span class="version">PhotoRecall · Local</span></div>
+  </aside>
+
+  <div class="workspace">
+    <header class="topbar"><div class="breadcrumb"><span data-icon="image"></span> 照片库 <span class="breadcrumb-separator">/</span> <strong id="library-title">记忆练习册</strong></div><select id="mobile-library" class="mobile-only" aria-label="切换照片库"></select><div class="top-actions"><span class="local-status"><i></i>本地运行</span><button class="quiet-button theme-button" id="theme-toggle" aria-label="切换深色外观" title="切换深色外观"><span data-icon="moon"></span></button><button class="quiet-button mobile-only" id="mobile-settings" aria-label="模型与设置"><span data-icon="sliders"></span></button><button class="quiet-button" id="analysis-button"><span data-icon="spark"></span>增强检索</button><button class="quiet-button" id="update-index"><span data-icon="refresh"></span>更新照片</button></div></header>
+    <div class="work-body">
+      <main>
+        <section class="intro">
+          <div class="eyebrow">A LITTLE MEMORY. A WAY BACK.</div>
+          <h1>让记忆，重新清晰。</h1>
+          <p>一个地方、一束光、一个瞬间。<br class="mobile-break">从你记得的细节，找回那张照片。</p>
+          <div class="quick-prompts"><span>试着找</span><button data-prompt="有树的照片">有树的照片 <span>↗</span></button><button data-prompt="海边的日落">海边的日落 <span>↗</span></button><button data-prompt="夜晚的城市">夜晚的城市 <span>↗</span></button></div>
+          
+        </section>
+
+        <section class="condition-area"><div class="section-caption">搜索线索 <button id="reset-search">清空线索</button></div><div id="conditions" class="conditions"><span class="no-conditions">不用记得时间，先描述你记得的画面。</span></div></section>
+        <section id="job-panel" class="job-panel hidden" aria-live="polite"></section>
+        <div class="results-toolbar"><div><h2 id="results-heading">照片</h2><span id="result-count">12 张演示插画</span></div><div class="view-controls"><div class="density-control" role="group" aria-label="照片排列"><button id="density-comfortable" aria-label="舒展排列" title="舒展排列" aria-pressed="true"><span data-icon="grid"></span></button><button id="density-compact" aria-label="紧凑排列" title="紧凑排列" aria-pressed="false"><span data-icon="grid-small"></span></button></div><button id="apply-ranking" class="quiet-button hidden">更新排序</button><label class="sr-only" for="sort">排序</label><select id="sort"><option value="relevance">相关程度</option><option value="date">拍摄日期</option><option value="base">原始检索顺序</option></select></div></div>
+        <div id="pending-control" class="result-filter-controls hidden"><span id="filter-summary" role="status"></span><div><button id="continue-filter" class="quiet-button">继续筛选</button><label><input id="show-pending" type="checkbox"> 查看其他候选</label></div></div>
+        <div id="mode-note" class="mode-note"><span data-icon="info"></span><span></span></div>
+        <div id="coverage-note" class="mode-note hidden" role="status"></div>
+        <div id="verification-panel" class="job-panel hidden" aria-live="polite"></div>
+        <section id="gallery" class="gallery" aria-label="照片搜索结果"></section>
+        <div id="empty-state" class="empty-state hidden"><span data-icon="search"></span><h3>给记忆一点空间</h3><p id="empty-description">暂时没有找到匹配项，试着去掉一个条件。</p><button class="quiet-button" id="empty-reset">重新开始</button></div>
+        <footer class="main-footer"><span>PHOTO RECALL</span><p id="footer-note">演示插画用于体验操作，AI 搜索效果需要用真实照片验证。</p></footer>
+      </main>
+
+      <aside class="conversation" aria-label="照片搜索对话">
+        <div class="conversation-heading"><span class="assistant-symbol" data-icon="spark"></span><div><h2>一起找回</h2><p>你的照片查找助手</p></div><kbd class="search-shortcut" title="定位搜索框">⌘ K</kbd></div>
+        <div class="chat-scroll" id="chat-scroll"><div class="assistant-message welcome"><div class="memory-symbol" aria-hidden="true"><i></i><i></i><i></i></div><h3>记得一点，就够开始。</h3><p>不必记住日期，也不必一次说清。<br>先描述画面，再慢慢补充。</p><div class="example-dialogue"><span>比如，你可以这样说</span><button data-prompt="灯光比较暗，有人在生日蛋糕前许愿">灯光暗，有人在蛋糕前许愿 <span>↗</span></button><button data-prompt="有树的照片，旁边停着一辆车">一棵树，旁边停着一辆车 <span>↗</span></button></div></div><div id="messages" aria-live="polite"></div></div>
+        <div class="chat-bottom"><form id="search-form"><label for="query" class="sr-only">描述想找的照片</label><textarea id="query" rows="3" maxlength="1000" placeholder="那张照片，你还记得什么？"></textarea><div class="composer-bottom"><span id="composer-status">可以继续补充细节</span><button id="send-button" type="submit" aria-label="搜索照片"><span data-icon="arrow-up"></span></button></div></form><details class="search-tools"><summary>更多搜索工具</summary><button class="inspect-button" id="expand-rerank">检查更多候选 ↗</button><div class="inspection-controls"><select id="inspect-count" aria-label="核对候选范围"><option value="6">每批筛选 6 张</option><option value="12" selected>每批筛选 12 张</option><option value="24">每批筛选 24 张</option><option value="64">每批筛选 64 张</option></select><button id="cancel-inspection" class="quiet-button hidden">停止核对</button></div><button class="inspect-button" id="inspect-button"><span data-icon="spark"></span><span>核对候选细节</span><span>↗</span></button></details><p class="chat-footnote">Enter 发送 · Shift + Enter 换行</p></div>
+      </aside>
+    </div>
+  </div>
+
+  <dialog id="folder-dialog" class="dialog"><button class="dialog-close" aria-label="关闭">×</button><div class="modal-icon" data-icon="folder"></div><h2>把一个文件夹变成照片库</h2><p>选择本机的照片目录。会读取图片并生成索引，原图留在原处。</p><form id="folder-form"><label for="folder-path">文件夹路径</label><div class="path-row"><input id="folder-path" required placeholder="/Users/你的名字/Pictures/旅行照片"><button class="quiet-button" type="button" id="pick-folder">选择…</button></div><p class="field-hint">支持 PNG、JPEG、WebP、BMP、TIFF；会包含子文件夹。</p><label class="checkbox-label"><input type="checkbox" id="start-on-add" checked>添加后开始建立索引</label><div class="folder-explanation"><strong>目前可以做什么？</strong><p>不安装 AI 也能浏览缩略图、搜索文件信息。准备好模型后，启用画面搜索并更新索引即可。</p></div><button type="submit" class="primary-button" id="confirm-folder">添加照片库 →</button></form></dialog>
+
+  <dialog id="settings-dialog" class="dialog settings-dialog"><button class="dialog-close" aria-label="关闭">×</button><div class="eyebrow">让照片搜索更进一步</div><h2>模型与运行状态</h2><p>图片、画面描述与照片文字联合搜索，全部在本机运行。</p><div id="model-status"></div><div class="setup-instructions"><strong>索引只需建立一次</strong><p>打开 PhotoRecall 项目文件夹，阅读 README.md。添加照片后点击更新索引；点击「增强检索」生成可复用的描述、OCR与文字向量，支持暂停和继续。</p></div><div class="library-tools"><button class="quiet-button" id="visual-index-button">补全图像向量</button></div><div class="settings-actions"><button id="refresh-models" class="quiet-button">刷新状态</button><button id="enable-semantic" class="primary-button">启用画面搜索</button></div></dialog>
+
+  <dialog id="photo-dialog" class="photo-dialog"><div class="preview-navigation"><button id="photo-prev" aria-label="上一张照片" title="上一张（←）">←</button><span id="photo-counter"></span><button id="photo-next" aria-label="下一张照片" title="下一张（→）">→</button></div><button class="dialog-close" aria-label="关闭">×</button><img id="photo-preview" alt=""><span id="photo-loading" class="photo-loading hidden" role="status">正在载入原图…</span><div class="photo-info"><span class="eyebrow" id="photo-kind">照片详情</span><h2 id="photo-name"></h2><p id="photo-description"></p><div id="photo-meta"></div><div id="inspection-detail"></div><div class="photo-actions"><button id="inspect-photo" class="quiet-button">核对这张的条件</button><a id="original-link" class="primary-button" target="_blank" rel="noopener">打开原图 ↗</a><button id="reveal-button" class="quiet-button">在文件夹中显示</button></div></div></dialog>
+  <div class="toast hidden" id="toast" role="status"></div>
+  <script src="/static/matches.js?v=20261016-matches-5"></script>
+  <script src="/static/app.js?v=20261016-matches-5"></script>
+</body>
+</html>

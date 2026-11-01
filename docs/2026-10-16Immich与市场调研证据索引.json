@@ -1,0 +1,314 @@
+{
+  "date": "2026-10-16",
+  "purpose": "Immich architecture and PhotoRecall market viability research",
+  "immich_release": "v3.3.3",
+  "immich_commit": "d2dac658fe1c67e8bbd08aa18200a32e5d45b9e4",
+  "live_competitor_benchmark_performed": false,
+  "private_photos_uploaded": false,
+  "production_code_changed": false,
+  "sources": [
+    {
+      "url": "https://github.com/immich-app/immich/blob/d2dac658fe1c67e8bbd08aa18200a32e5d45b9e4/server/src/services/smart-info.service.ts#L69",
+      "evidence_type": "pinned_source_code_or_release_document"
+    },
+    {
+      "url": "https://github.com/immich-app/immich/blob/d2dac658fe1c67e8bbd08aa18200a32e5d45b9e4/server/src/services/search.service.ts#L325",
+      "evidence_type": "pinned_source_code_or_release_document"
+    },
+    {
+      "url": "https://github.com/immich-app/immich/blob/d2dac658fe1c67e8bbd08aa18200a32e5d45b9e4/server/src/repositories/search.repository.ts#L320",
+      "evidence_type": "pinned_source_code_or_release_document"
+    },
+    {
+      "url": "https://github.com/immich-app/immich/blob/d2dac658fe1c67e8bbd08aa18200a32e5d45b9e4/server/src/utils/database.ts#L510",
+      "evidence_type": "pinned_source_code_or_release_document"
+    },
+    {
+      "url": "https://github.com/immich-app/immich/blob/d2dac658fe1c67e8bbd08aa18200a32e5d45b9e4/machine-learning/immich_ml/models/clip/visual.py",
+      "evidence_type": "pinned_source_code_or_release_document"
+    },
+    {
+      "url": "https://github.com/immich-app/immich/blob/d2dac658fe1c67e8bbd08aa18200a32e5d45b9e4/machine-learning/immich_ml/models/clip/textual.py",
+      "evidence_type": "pinned_source_code_or_release_document"
+    },
+    {
+      "url": "https://github.com/immich-app/immich/blob/d2dac658fe1c67e8bbd08aa18200a32e5d45b9e4/server/src/dtos/config.dto.ts#L627",
+      "evidence_type": "pinned_source_code_or_release_document"
+    },
+    {
+      "url": "https://github.com/immich-app/immich/blob/d2dac658fe1c67e8bbd08aa18200a32e5d45b9e4/machine-learning/immich_ml/config.py#L58",
+      "evidence_type": "pinned_source_code_or_release_document"
+    },
+    {
+      "url": "https://github.com/immich-app/immich/blob/d2dac658fe1c67e8bbd08aa18200a32e5d45b9e4/docs/docs/features/searching.md#L195",
+      "evidence_type": "pinned_source_code_or_release_document"
+    },
+    {
+      "url": "https://docs.immich.app/features/searching/",
+      "evidence_type": "official_documentation_or_product_claim",
+      "lightpanda": {
+        "http_status": 200,
+        "extracted_chars": 9963
+      }
+    },
+    {
+      "url": "https://huggingface.co/immich-app/nllb-clip-large-siglip__v1",
+      "evidence_type": "official_documentation_or_product_claim",
+      "lightpanda": {
+        "http_status": 200,
+        "extracted_chars": 5518
+      }
+    },
+    {
+      "url": "https://docs.immich.app/features/libraries/",
+      "evidence_type": "official_documentation_or_product_claim",
+      "lightpanda": {
+        "http_status": 200,
+        "extracted_chars": 17811
+      }
+    },
+    {
+      "url": "https://support.apple.com/en-lamr/guide/iphone/iph392d77d5f/ios",
+      "evidence_type": "official_documentation_or_product_claim"
+    },
+    {
+      "url": "https://support.google.com/photos/answer/15318661?hl=en-GB",
+      "evidence_type": "official_documentation_or_product_claim",
+      "lightpanda": {
+        "http_status": 200,
+        "extracted_chars": 8396
+      }
+    },
+    {
+      "url": "https://news.samsung.com/global/interview-a-new-and-enhanced-gallery-experience-how-samsung-transformed-photo-searching-and-video-editing-with-the-galaxy-s25-series",
+      "evidence_type": "official_documentation_or_product_claim",
+      "lightpanda": {
+        "http_status": 200,
+        "extracted_chars": 21132
+      }
+    },
+    {
+      "url": "https://consumer.huawei.com/cn/support/content/zh-cn00415375/",
+      "evidence_type": "official_documentation_or_product_claim",
+      "lightpanda": {
+        "http_status": 200,
+        "extracted_chars": 15542
+      }
+    },
+    {
+      "url": "https://www.honor.com/cn/support/content/zh-cn15858732/",
+      "evidence_type": "official_documentation_or_product_claim"
+    },
+    {
+      "url": "https://www.oppo.com/cn/smartphones/series-find-n/find-n5/",
+      "evidence_type": "official_documentation_or_product_claim",
+      "lightpanda": {
+        "http_status": 200,
+        "extracted_chars": 36743
+      }
+    },
+    {
+      "url": "https://www.vivo.com.cn/vivo/s18pro/",
+      "evidence_type": "official_documentation_or_product_claim",
+      "lightpanda": {
+        "http_status": 200,
+        "extracted_chars": 19658
+      }
+    },
+    {
+      "url": "https://privacy.mi.com/AIEngine/zh_CN/",
+      "evidence_type": "official_documentation_or_product_claim",
+      "lightpanda": {
+        "http_status": 200,
+        "extracted_chars": 14204
+      }
+    },
+    {
+      "url": "https://support.microsoft.com/en-US/Windows/Apps/Photos/search-photos",
+      "evidence_type": "official_documentation_or_product_claim"
+    },
+    {
+      "url": "https://support.apple.com/en-lamr/121115",
+      "evidence_type": "official_documentation_or_product_claim"
+    },
+    {
+      "url": "https://ente.com/help/photos/features/search-and-discovery/magic-search",
+      "evidence_type": "official_documentation_or_product_claim",
+      "lightpanda": {
+        "http_status": 200,
+        "extracted_chars": 39090
+      }
+    },
+    {
+      "url": "https://docs.photoprism.app/developer-guide/vision/caption-generation/",
+      "evidence_type": "official_documentation_or_product_claim",
+      "lightpanda": {
+        "http_status": 200,
+        "extracted_chars": 29813
+      }
+    },
+    {
+      "url": "https://queryable.app/",
+      "evidence_type": "official_documentation_or_product_claim",
+      "lightpanda": {
+        "http_status": 200,
+        "extracted_chars": 7577
+      }
+    },
+    {
+      "url": "https://play.google.com/store/apps/details?hl=zh&id=com.cooke.picklight",
+      "evidence_type": "official_documentation_or_product_claim",
+      "lightpanda": {
+        "http_status": 200,
+        "extracted_chars": 5754
+      }
+    },
+    {
+      "url": "https://www.synology.com/en-us/products/deep-search",
+      "evidence_type": "official_documentation_or_product_claim",
+      "lightpanda": {
+        "http_status": 200,
+        "extracted_chars": 716
+      },
+      "content_checked_via": "built-in web fallback after incomplete/blocked Lightpanda output"
+    },
+    {
+      "url": "https://cyme.io/en/products/peakto/features/conversational-search/",
+      "evidence_type": "official_documentation_or_product_claim",
+      "lightpanda": {
+        "http_status": 200,
+        "extracted_chars": 20988
+      }
+    },
+    {
+      "url": "https://excire.com/en/",
+      "evidence_type": "official_documentation_or_product_claim"
+    },
+    {
+      "url": "https://cn.eagle.cool/support/article/ai-search",
+      "evidence_type": "official_documentation_or_product_claim",
+      "lightpanda": {
+        "http_status": 200,
+        "extracted_chars": 9306
+      }
+    },
+    {
+      "url": "https://www.qnap.com/en-uk/software/qsirch",
+      "evidence_type": "official_documentation_or_product_claim",
+      "lightpanda": {
+        "http_status": 403,
+        "extracted_chars": 50018
+      },
+      "content_checked_via": "built-in web fallback after incomplete/blocked Lightpanda output"
+    },
+    {
+      "url": "https://support.mylio.com/find-photos-fast",
+      "evidence_type": "official_documentation_or_product_claim"
+    },
+    {
+      "url": "https://www.acdsee.com/en/photo-studio/ai/",
+      "evidence_type": "official_documentation_or_product_claim"
+    },
+    {
+      "url": "https://www.alltuu.com/",
+      "evidence_type": "official_documentation_or_product_claim",
+      "lightpanda": {
+        "http_status": 200,
+        "extracted_chars": 23166
+      }
+    },
+    {
+      "url": "https://www.douyin.com/video/7367185404774059291",
+      "evidence_type": "anecdotal_user_feedback_not_representative",
+      "content_checked_via": "kimi-webbridge visible page and comments",
+      "video_watched": false
+    },
+    {
+      "url": "https://www.v2ex.com/t/1118200",
+      "evidence_type": "anecdotal_user_feedback_not_representative",
+      "lightpanda": {
+        "http_status": 200,
+        "extracted_chars": 13776
+      }
+    },
+    {
+      "url": "https://www.v2ex.com/t/1163318",
+      "evidence_type": "anecdotal_user_feedback_not_representative",
+      "lightpanda": {
+        "http_status": 200,
+        "extracted_chars": 7422
+      }
+    },
+    {
+      "url": "https://www.reddit.com/r/immich/comments/1h7m5da/completely_blown_away_by_image_search_once_you/",
+      "evidence_type": "anecdotal_user_feedback_not_representative"
+    },
+    {
+      "url": "https://www.reddit.com/r/immich/comments/1ms1xed/can_you_improve_the_results_of_smart_search/",
+      "evidence_type": "anecdotal_user_feedback_not_representative"
+    },
+    {
+      "url": "https://www.digitalcameraworld.com/photography/photo-editing/excire-search-2026-review-ai-powered-image-searching-in-lightroom-classic",
+      "evidence_type": "independent_review_not_comparative_test"
+    },
+    {
+      "url": "https://aclanthology.org/2022.emnlp-main.143/",
+      "evidence_type": "research_paper",
+      "lightpanda": {
+        "http_status": 200,
+        "extracted_chars": 6463
+      }
+    },
+    {
+      "url": "https://arxiv.org/abs/2502.14786",
+      "evidence_type": "research_paper",
+      "lightpanda": {
+        "http_status": 0,
+        "extracted_chars": 0
+      }
+    },
+    {
+      "url": "https://github.com/apple-aiml-research/ml-mobileclip/blob/main/LICENSE_MODELS",
+      "evidence_type": "official_documentation_or_product_claim",
+      "lightpanda": {
+        "http_status": 200,
+        "extracted_chars": 12264
+      }
+    },
+    {
+      "url": "https://apps.apple.com/cn/app/id1664361663",
+      "evidence_type": "app_store_developer_description_not_independent_benchmark",
+      "content_checked_via": "Lightpanda; redirected to Chinese app listing",
+      "note": "Chinese semantic offline search verified as developer claim; training-size and ranking claims not used as validated facts"
+    }
+  ],
+  "project_snapshot": {
+    "libraries": [
+      {
+        "assets": 871,
+        "caption_records": 17,
+        "caption_vectors": 0,
+        "ocr_records": 92
+      },
+      {
+        "assets": 338,
+        "caption_records": 108,
+        "caption_vectors": 96,
+        "ocr_records": 338
+      }
+    ],
+    "default_verification_budget": 4,
+    "max_verification_budget": 8,
+    "primary_view": "matched only when filtering",
+    "files": {
+      "app/hybrid.py": "f9691daba7cf9c9e8b2422587d5cad673fc52654c5cc6521ba40039a5ef44695",
+      "app/matching.py": "3bb9fb800dfa71fb5f9e5057446845c174ec982b211c193f7c3302627ab1f43a",
+      "web/app.js": "948bd08342e0abbcf8e9b5361cf72404ddf99b8dff8bea9acdf4cd6e90e4c911"
+    }
+  },
+  "access_limitations": [
+    "Xiaohongshu search required login; no verified notes/comments used",
+    "No sufficiently verified WeChat public-account user comments obtained",
+    "No representative demand survey, sales data, or willingness-to-pay study performed"
+  ]
+}

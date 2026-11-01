@@ -1,0 +1,175 @@
+{
+  "captured_at": "2026-10-15T10:06:48.510752+08:00",
+  "scope": "read_only_database_and_source_review_no_model_inference_no_upload",
+  "annotations_total": 0,
+  "coverage": [
+    [
+      "7adabc199edc26c0",
+      871,
+      0
+    ],
+    [
+      "demo",
+      12,
+      0
+    ],
+    [
+      "ebd5889d68aaac92",
+      338,
+      0
+    ]
+  ],
+  "source_hashes": {
+    "app/providers/ollama.py": "648a184dc1a02dd8e0978602e21dd4ba6e5e1b5f184d04ade1e2349f0256e3a8",
+    "app/engine.py": "67374f6e8627cd1d0303eae69fd7d503454162d44999e8708ddc73cc33e19c98",
+    "app/pipeline.py": "839a00afac0f0b36be24b2074fe422093d6db9f1eb9894dd1fd9e578be918260",
+    "web/app.js": "8fe982b4040ad7b819d02fe5894f608a38b9026b9b713e01c2cac5a69cdc86c9",
+    "app/main.py": "890a019bc9286e52b4b7dc8cc27665702a2ff3a621b9836bb9affa5d37bddcdd"
+  },
+  "web_sources": [
+    {
+      "url": "https://docs.immich.app/features/searching/",
+      "http_status": 200,
+      "content_characters": 14271,
+      "content_sha256": "3a3edc04dbdfea025176137e8b1f86c72266717a84cb6ea47a54f34f7c6ecc78"
+    },
+    {
+      "url": "https://docs.photoprism.app/user-guide/settings/advanced/",
+      "http_status": 200,
+      "content_characters": 50207,
+      "content_sha256": "cba545472bc8a0099ba645fd9766617f03b7871786ae3a5077999549fc31baf8"
+    },
+    {
+      "url": "https://github.com/QwenLM/Qwen3-VL-Embedding",
+      "http_status": 200,
+      "content_characters": 38851,
+      "content_sha256": "144a00396d564b455ae1bdd909637621e2c6ad5f0bf2dd2854beb9c622d1642b"
+    },
+    {
+      "url": "https://github.com/Saehyung-Lee/PlugIR",
+      "http_status": 200,
+      "content_characters": 14154,
+      "content_sha256": "76877e540923db623ad83d783cd84d751b9b34e9777fc1d4dd0720089989367e"
+    },
+    {
+      "url": "https://docs.photoprism.app/developer-guide/vision/caption-generation/",
+      "http_status": 200,
+      "content_characters": 29813,
+      "content_sha256": "d7a071edfb35e696aab6d324d855e2c2d52143ef8dfad597d7d273586723c7ba"
+    },
+    {
+      "url": "https://github.com/AtharvaPingale/photo-search",
+      "http_status": 200,
+      "content_characters": 40002,
+      "content_sha256": "15aa11ee6c15f91da52ed3851440ab7524ddd5f318a8e3dbea15894a3a291d7d"
+    },
+    {
+      "url": "https://huggingface.co/Qwen/Qwen3.5-4B",
+      "http_status": 200,
+      "content_characters": 45894,
+      "content_sha256": "436952c162a7606337a922c02281d347a28db05aa7bb43ed878967853e8ac2be"
+    },
+    {
+      "url": "https://huggingface.co/Qwen/Qwen3.5-9B",
+      "http_status": 200,
+      "content_characters": 45732,
+      "content_sha256": "a6109628bd256f0b5b387586fb7a536e4cd368dd038556a6560a9f4da3b4f33b"
+    },
+    {
+      "url": "https://github.com/Alibaba-NLP/core-emb",
+      "http_status": 200,
+      "content_characters": 18955,
+      "content_sha256": "6b1355608ccdb0a6cea9a8ac6427f6a4d35629974d4d2ca38338c3efd631829e"
+    },
+    {
+      "url": "https://docs.photoprism.app/user-guide/ai/ollama-models/",
+      "http_status": 200,
+      "content_characters": 56346,
+      "content_sha256": "0629fdd5a739fbb7eabc1c8406ba91f5a963c8de060e4cbebfd9461c1ea1a179"
+    },
+    {
+      "url": "https://huggingface.co/Qwen/Qwen3-Embedding-0.6B",
+      "http_status": 200,
+      "content_characters": 26202,
+      "content_sha256": "cccecf0cb0d2229288c12bee2c3711e1a797693ece05583ea0860b545e963d05"
+    },
+    {
+      "url": "https://huggingface.co/mlx-community/Qwen3.5-4B-MLX-4bit",
+      "http_status": 200,
+      "content_characters": 10166,
+      "content_sha256": "b0dd74da8f97c29f954be3cc7a028b12969b68a872ff5473306d8c92efcee4bc"
+    },
+    {
+      "url": "https://github.com/Blaizzy/mlx-vlm",
+      "http_status": 200,
+      "content_characters": 95157,
+      "content_sha256": "0248c7fef212f11b5fb4a6bd194465cd2ce047c622271ac49383da07707aebc5"
+    },
+    {
+      "url": "https://github.com/giuvilas/Local-aiPhotos",
+      "http_status": 200,
+      "content_characters": 43485,
+      "content_sha256": "0e979aa1cfc71f5dabcf00a9e905bc4ff7bca82d04bfe8c6c783be747356db27"
+    },
+    {
+      "url": "https://ai.google.dev/gemini-api/docs/models",
+      "http_status": 200,
+      "content_characters": 37381,
+      "content_sha256": "cf06c03663c938dc40b7ab49b5805c8f6dcc2ab59961301ed5db38f87da20047"
+    },
+    {
+      "url": "https://ai.google.dev/gemini-api/docs/image-understanding",
+      "http_status": 200,
+      "content_characters": 60629,
+      "content_sha256": "af420956e8c6b2a7bdd5377e947d29523f4d3d6d873c45f9d928d45d3ac2b62b"
+    },
+    {
+      "url": "https://ai.google.dev/gemini-api/docs/pricing",
+      "http_status": 200,
+      "content_characters": 96202,
+      "content_sha256": "b506264b2ecc3b8afdd11e284764438c3c3433ae9c70e38fe56da9dbda08b96e"
+    },
+    {
+      "url": "https://blog.google/products-and-platforms/products/photos/ask-photos-google-io-2024/",
+      "http_status": 200,
+      "content_characters": 7837,
+      "content_sha256": "c174bbe73e4e08429235fed18755972c0916a609182fd6b07c60140f4cc32282"
+    },
+    {
+      "url": "https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash",
+      "http_status": 200,
+      "content_characters": 14481,
+      "content_sha256": "1e648f89796ba8426744193dd6cf4d4d488d4e8f02d72dffcc0f11d3073e3004"
+    },
+    {
+      "url": "https://ai.google.dev/gemini-api/docs/models/gemini-3.1-pro-preview",
+      "http_status": 200,
+      "content_characters": 14984,
+      "content_sha256": "4e0e640569b7478a553ca2b029b6f55f94dfc8f11d64f5ef5d15cc4a4fe9d41a"
+    },
+    {
+      "url": "https://ai.google.dev/gemini-api/docs/structured-output",
+      "http_status": 200,
+      "content_characters": 68007,
+      "content_sha256": "6e642f1af1acf5bb642abde186997563b60dfea442841b5a8b54387e920258b1"
+    },
+    {
+      "url": "https://docs.photoprism.app/developer-guide/vision/model-comparison/",
+      "http_status": 200,
+      "content_characters": 39778,
+      "content_sha256": "aba9fa687ec46b43216f3eaf73c5dec7973e6ecbac2e5d74a461e0b50a5cdb2d"
+    },
+    {
+      "url": "https://ai.google.dev/gemini-api/docs/models/gemini-4-argon",
+      "http_status": 200,
+      "content_characters": 14694,
+      "content_sha256": "82ccc43bc2a7d3e03287aec1b78a9e7a1ea679ab52412a56c594bb7816498aa7"
+    },
+    {
+      "url": "https://aclanthology.org/2024.acl-long.46/",
+      "http_status": 200,
+      "content_characters": 6159,
+      "content_sha256": "907d6f4fc8c553e9cf11072c2f191b56087e55e08545224c344220b40a7ead46"
+    }
+  ]
+}
