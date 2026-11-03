@@ -13,6 +13,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image, ImageOps
 
+from .metadata import OfflinePlaces, gps_coordinates, captured_time
 from .query import CONCEPTS, contains, semantic_query, update_conditions
 from .providers.siglip import SiglipProvider
 from .providers.detector import Detector
@@ -70,7 +71,8 @@ class Engine:
               PRIMARY KEY(asset_id,fingerprint,version));
             """)
             for table, column, definition in [("assets", "visual_stats", "TEXT"), ("sessions", "search_plan", "TEXT DEFAULT '{}'"),
-                                              ("annotations", "field_vectors", "BLOB")]:
+                                              ("annotations", "field_vectors", "BLOB"),
+                                              *[("assets", c, t) for c, t in [("latitude", "REAL"), ("longitude", "REAL"), ("place_names", "TEXT"), ("metadata_version", "TEXT")]]]:
                 if column not in [row[1] for row in con.execute(f"PRAGMA table_info({table})")]:
                     con.execute(f"ALTER TABLE {table} ADD COLUMN {column} {definition}")
         self.pipeline = RetrievalPipeline(self)
@@ -205,6 +207,8 @@ class Engine:
                 with inference(self.provider):
                     self.provider._load()
             expected_model = self.provider.name if use_ai else None
+            places = OfflinePlaces()
+            places.load()
             seen = set()
             for path in sorted(files):
                 if job["cancel"].is_set():
@@ -220,6 +224,14 @@ class Engine:
                     if (old and old["mtime_ns"] == st.st_mtime_ns and old["size"] == st.st_size
                             and not old["error"] and (not use_ai or old["model"] == expected_model)
                             and (self.thumbs / old["thumbnail"]).exists()):
+                        # Refresh metadata independently; preserve vectors and fingerprint.
+                        with Image.open(path) as source:
+                            exif = source.getexif()
+                            lat, lon = gps_coordinates(exif)
+                            captured = captured_time(exif)
+                        with self.db() as con:
+                            con.execute("UPDATE assets SET latitude=?,longitude=?,place_names=?,metadata_version=?,captured=COALESCE(?,captured) WHERE id=?",
+                                (lat, lon, json.dumps(places.reverse(lat, lon), ensure_ascii=False), places.version, captured, key))
                         job["skipped"] += 1
                         job["done"] += 1
                         continue
@@ -230,13 +242,8 @@ class Engine:
                     with Image.open(path) as source:
                         width, height = source.size
                         exif = source.getexif()
-                        captured = None
-                        date = exif.get(36867) or exif.get(306)
-                        if date:
-                            try:
-                                captured = datetime.strptime(str(date), "%Y:%m:%d %H:%M:%S").isoformat()
-                            except ValueError:
-                                pass
+                        captured = captured_time(exif)
+                        lat, lon = gps_coordinates(exif)
                         image = ImageOps.exif_transpose(source).convert("RGB")
                         image.thumbnail((768, 768))
                         thumb = key + ".jpg"
@@ -250,6 +257,8 @@ class Engine:
                         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)""", (key, library_id, str(path), path.name, digest.hexdigest(),
                             st.st_mtime_ns, st.st_size, width, height, captured, thumb,
                             vector.astype(np.float32).tobytes() if vector is not None else None, expected_model))
+                        con.execute("UPDATE assets SET latitude=?,longitude=?,place_names=?,metadata_version=? WHERE id=?",
+                            (lat, lon, json.dumps(places.reverse(lat, lon), ensure_ascii=False), places.version, key))
                         con.execute("UPDATE assets SET visual_stats=? WHERE id=?", (json.dumps(visual_stats(self.thumbs / thumb)), key))
                     job["processed"] += 1
                 except Exception as exc:

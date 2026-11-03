@@ -3,3 +3,5 @@ __pycache__/
 data/*
 !data/.gitkeep
 .DS_Store
+# Offline boundary data: prepared locally, licence of upstream data not yet verified.
+resources/geography/

@@ -1,6 +1,7 @@
 """Serialize local inference and release other models on a 16GB shared-memory Mac."""
 import gc
 import json
+import os
 import threading
 import urllib.request
 import weakref
@@ -31,10 +32,13 @@ def unload_ollama():
 @contextmanager
 def inference(owner):
     with LOCK:
+        if os.environ.get("PHOTORECALL_KEEP_MODELS") == "1":
+            yield
+            return
         for provider in list(PROVIDERS):
             if provider is not owner:
                 provider.unload()
-        if owner != "ollama":
+        if owner != "ollama" and os.environ.get("PHOTORECALL_DISABLE_OLLAMA") != "1":
             # /api/ps avoids loading an absent model merely to unload it.
             try:
                 with urllib.request.urlopen("http://127.0.0.1:11434/api/ps", timeout=1) as response:

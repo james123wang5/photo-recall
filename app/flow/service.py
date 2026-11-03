@@ -5,6 +5,7 @@ and per-photo coverage is separate from similarity ranking and model evidence.
 """
 import copy
 import json
+import math
 import re
 import threading
 import time
@@ -34,7 +35,12 @@ class FlowService:
         for key, value in values.items():
             if key not in DEFAULTS:
                 raise ValueError("未知设置：" + key)
-            if key in bounds:
+            if key == "fusion_weights":
+                if not isinstance(value, dict) or any(not isinstance(k, str) or not re.fullmatch(r"[a-z_]{1,40}", k)
+                        or type(v) not in (int, float) or not math.isfinite(v) or not 0 <= v <= 10 for k, v in value.items()):
+                    raise ValueError("融合权重必须为 family 到 0～10 有限数值的字典")
+                value = {**config.get(key, DEFAULTS[key]), **value}
+            elif key in bounds:
                 low, high = bounds[key]
                 if type(value) is not int or not low <= value <= high:
                     raise ValueError(f"{key} 必须在 {low} 到 {high} 之间")
@@ -173,6 +179,7 @@ class FlowService:
 
     def _apply_recall(self, run, result):
         order, scores, sources, warnings, regions, channels = result
+        run['existence_signal'] = next((c['existence_signal'] for c in channels if 'existence_signal' in c), {})
         run.update(base=order, order=order, scores=scores, sources=sources, regions=regions,
                    warnings=list(dict.fromkeys(run["warnings"] + warnings)))
         if order and "first_preview_ms" not in run:
@@ -439,6 +446,7 @@ class FlowService:
         return {"id": rid, "session": run["query"], "status": run["status"], "stage": run["stage"],
                 "revision": run["revision"], "results": results, "result_total": count,
                 "candidate_count": len(run["base"]), "coverage": self.coverage(rid),
+                "existence_signal": run.get("existence_signal", {}),
                 "warnings": list(dict.fromkeys(run["warnings"]))[-12:], "stop_reason": run["stop_reason"],
                 "elapsed_ms": run.get("elapsed_ms", 0), "offset": offset, "limit": limit,
                 "first_preview_ms": run.get("first_preview_ms"),

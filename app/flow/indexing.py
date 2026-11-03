@@ -13,6 +13,7 @@ from PIL import Image, ImageOps
 from ..hybrid import observation_text
 from ..providers import ollama
 from .domain import digest
+from .people import face_components
 from .store import encode
 from .tools import crop_image
 
@@ -43,6 +44,18 @@ class FlowIndexer:
                               (asset["id"], asset["fingerprint"], version, key)).fetchone()
         if old:
             return
+        if region == "full":
+            # Legacy main vectors have identical preprocessing/version. Copy bytes,
+            # never reuse legacy SigLIP thumbnails or differently rounded crops.
+            with self.e.db() as con:
+                cached = con.execute("SELECT vector,dimension FROM feature_vectors WHERE asset_id=? AND fingerprint=? AND version=? AND region=-1",
+                    (asset["id"], asset["fingerprint"], version)).fetchone()
+            if cached:
+                self.flow.tools.original(asset)
+                with self.e.db() as con:
+                    con.execute("INSERT OR REPLACE INTO flow_vectors VALUES (?,?,?,?,?,?)",
+                        (asset["id"], asset["fingerprint"], version, key, cached["vector"], cached["dimension"]))
+                return
         vector = np.asarray(provider.image(image), dtype=np.float32)
         if vector.ndim != 1 or not np.isfinite(vector).all():
             raise ValueError("图像向量格式不正确")
@@ -53,17 +66,37 @@ class FlowIndexer:
 
     def _people(self, asset, image):
         tool = self.flow.tools.faces
-        for index, face in enumerate(tool.faces(image)):
-            vector = np.asarray(face.normed_embedding, dtype=np.float32)
-            with self.e.db() as con:
-                rows = con.execute("SELECT f.person_id,f.vector FROM flow_faces f JOIN assets a ON a.id=f.asset_id AND a.fingerprint=f.fingerprint WHERE f.version=?", (tool.version,)).fetchall()
-                similarities = [(float(np.frombuffer(r["vector"], dtype=np.float32) @ vector), r["person_id"]) for r in rows]
-                best = max(similarities, default=(-1, ""))
-                pid = best[1] if best[0] >= .5 else uuid.uuid4().hex
+        faces = tool.faces(image)
+        # Extraction is resumable; grouping happens only after the whole lane.
+        with self.e.db() as con:
+            con.execute("DELETE FROM flow_faces WHERE asset_id=?", (asset["id"],))
+            for index, face in enumerate(faces):
+                vector = np.asarray(face.normed_embedding, dtype=np.float32)
+                if vector.ndim != 1 or not np.isfinite(vector).all() or np.linalg.norm(vector) <= 0:
+                    raise ValueError("人脸向量无效")
+                pid = digest([asset["id"], asset["fingerprint"], index])[:32]
                 con.execute("INSERT OR IGNORE INTO flow_people VALUES (?, '')", (pid,))
                 box = [float(v) / (image.width if i % 2 == 0 else image.height) for i, v in enumerate(face.bbox.tolist())]
                 con.execute("INSERT OR REPLACE INTO flow_faces VALUES (?,?,?,?,?,?,?)", (
                     asset["id"], asset["fingerprint"], str(index), pid, vector.tobytes(), encode(box), tool.version))
+
+    def _cluster_people(self, library_id):
+        with self.e.db() as con:
+            rows = [dict(r) for r in con.execute("""SELECT f.*,p.name FROM flow_faces f JOIN assets a
+                ON a.id=f.asset_id AND a.fingerprint=f.fingerprint LEFT JOIN flow_people p ON p.id=f.person_id
+                WHERE a.library_id=? AND f.version=? ORDER BY f.asset_id,f.face_id""",
+                (library_id, self.flow.tools.faces.version))]
+            indexed = {(r["asset_id"], r["face_id"]): r for r in rows}
+            groups = face_components([{"key": key, "vector": np.frombuffer(r["vector"], dtype=np.float32)} for key, r in indexed.items()])
+            for group in groups:
+                named = {indexed[key]["person_id"] for key in group if indexed[key]["name"]}
+                # Never merge two confirmed identities through a similarity bridge.
+                pid = next(iter(named)) if len(named) == 1 else digest([library_id, group])[:32]
+                con.execute("INSERT OR IGNORE INTO flow_people VALUES (?, '')", (pid,))
+                for key in group:
+                    if len(named) > 1 and indexed[key]["name"]:
+                        continue
+                    con.execute("UPDATE flow_faces SET person_id=? WHERE asset_id=? AND face_id=?", (pid, *key))
 
     def build(self, job, components):
         config = self.flow.store.config()
@@ -76,6 +109,8 @@ class FlowIndexer:
                  or c == "text_vectors" and "description" in components]
         job["total"] = len(assets) * len(lanes)
         job["photo_total"] = len(assets)
+        # Wall-clock seconds per lane: image decode vs. model/tool work.
+        job["timing"] = {}
         try:
             # All visual assets become searchable before optional language work.
             for component in lanes:
@@ -84,6 +119,8 @@ class FlowIndexer:
                     "description": description_version,
                     "text_vectors": self.e.hybrid.embedding.version + ":" + description_version,
                     "people": self.flow.tools.faces.version}[component]
+                timing = job["timing"][component] = {"processed": 0, "skipped": 0, "errors": 0,
+                    "load_seconds": 0.0, "work_seconds": 0.0}
                 for asset in assets:
                     if not self.e.hybrid._wait(job):
                         job["status"] = "paused"
@@ -93,14 +130,18 @@ class FlowIndexer:
                         old = con.execute("SELECT status FROM flow_index_state WHERE asset_id=? AND component=? AND fingerprint=? AND version=?", (
                             asset["id"], component, asset["fingerprint"], version)).fetchone()
                     if old and old[0] in {"ready", "empty"}:
+                        timing["skipped"] += 1
                         job["skipped"] += 1
                         job["done"] += 1
                         continue
                     self.flow.store.index_state(asset, component, version, "processing")
+                    started = time.perf_counter()
                     try:
                         path = self.flow.tools.original(asset)
                         with Image.open(path) as source:
                             image = ImageOps.exif_transpose(source).convert("RGB")
+                        loaded = time.perf_counter()
+                        timing["load_seconds"] += loaded - started
                         empty = False
                         if component == "main_visual":
                             if not primary.installed:
@@ -139,13 +180,20 @@ class FlowIndexer:
                             self._people(asset, image)
                         self.flow.tools.original(asset)
                         self.flow.store.index_state(asset, component, version, "empty" if empty else "ready")
+                        timing["work_seconds"] += time.perf_counter() - loaded
+                        timing["processed"] += 1
                         job["processed"] += 1
                     except Exception as exc:
+                        timing["errors"] += 1
                         self.flow.store.index_state(asset, component, version, "error", str(exc)[:400])
                         job["errors"].append({"file": asset["name"], "message": str(exc)[:250]})
                         job["error_count"] = job.get("error_count", 0) + 1
                         job["errors"] = job["errors"][-30:]
                     job["done"] += 1
+                if component == "people":
+                    started = time.perf_counter()
+                    self._cluster_people(job["library_id"])
+                    timing["cluster_seconds"] = time.perf_counter() - started
             job.update(status="complete", current="本轮分层索引处理完成")
         except Exception as exc:
             job.update(status="error", current=str(exc)[:400])
