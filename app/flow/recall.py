@@ -5,6 +5,7 @@ from datetime import datetime
 import numpy as np
 from PIL import Image, ImageOps
 from ..hybrid import tokens
+from ..metadata import OfflinePlaces, date_clues, matches_date, metadata_only
 from .domain import digest, query_text, fuse
 from .providers import QwenRetrieval
 from .tools import crop_image
@@ -14,6 +15,7 @@ class Recall:
     def __init__(self, engine, store, tools):
         self.e, self.store, self.tools = engine, store, tools
         self.qwen = {}
+        self.places = OfflinePlaces()
 
     def primary(self, config):
         if config["primary"] == "wemm":
@@ -54,7 +56,7 @@ class Recall:
         return [r for r in rows if valid.get(r["asset_id"]) == r["fingerprint"]]
 
     @staticmethod
-    def rank_vectors(rows, vector, limit):
+    def rank_vectors(rows, vector, limit, with_scores=False):
         best, regions = {}, {}
         compatible = [r for r in rows if len(r["vector"]) == vector.size * 4]
         for start in range(0, len(compatible), 256):
@@ -67,7 +69,8 @@ class Recall:
                     best[aid] = float(score)
                     regions[aid] = row.get("region", "full")
         ids = sorted(best, key=lambda aid: (-best[aid], aid))[:limit]
-        return ids, {aid: regions[aid] for aid in ids}
+        result = (ids, {aid: regions[aid] for aid in ids})
+        return (*result, best) if with_scores else result
 
     def search(self, assets, query, config, limit, recovery=0, cancel=None, quick=False):
         channels, warnings, regions = [], [], {}
@@ -75,11 +78,36 @@ class Recall:
             return cancel is not None and cancel.is_set()
         def add(name, family, ids, weight=1):
             if ids:
-                channels.append({"name": name, "family": family, "ids": ids, "weight": weight})
+                channels.append({"name": name, "family": family, "ids": ids, "weight": weight * config.get("fusion_weights", {}).get(family, 1)})
         text = query_text(query)
         if not text and not query.get("reference") and not query.get("person_id"):
             order = [a["id"] for a in sorted(assets, key=lambda a: (a.get("captured") or "", a["id"]), reverse=True)]
             return order[:limit], {}, {}, warnings, regions, [{"name": "浏览", "family": "browse", "ids": order}]
+        rules, residual, date_warnings = date_clues(text)
+        warnings.extend(date_warnings)
+        place_names, residual = self.places.clues(residual, assets)
+        time_ids = {a["id"] for a in assets if matches_date(a.get("captured"), rules)} if rules else None
+        place_ids = {a["id"] for a in assets if place_names.intersection(json.loads(a.get("place_names") or '[]'))} if place_names else None
+        pure_metadata = bool(rules or place_names or date_warnings) and metadata_only(residual) and not query.get("reference") and not query.get("person_id")
+        if self.places.version == "missing" and any(a.get("latitude") is not None for a in assets):
+            warnings.append("离线行政区数据未准备；请运行 scripts/prepare_geography.py，不会联网反查照片坐标")
+        if pure_metadata:
+            allowed = {a["id"] for a in assets} - set(query.get("excluded", []))
+            for ids in (time_ids, place_ids):
+                if ids is not None:
+                    allowed &= ids
+            if date_warnings and not rules:
+                allowed.clear()
+            # Newest first; missing dates last, equal dates use the stable asset ID.
+            dated = sorted((a for a in assets if a["id"] in allowed), key=lambda a: a["id"])
+            dated.sort(key=lambda a: a.get("captured") or "", reverse=True)
+            ids = [a["id"] for a in dated]
+            if place_ids is not None:
+                add("拍摄地点", "metadata_place", ids)
+            if time_ids is not None or date_warnings:
+                add("拍摄日期", "metadata_time", ids)
+            _, scores, sources = fuse(channels, len(ids))
+            return ids[:limit], scores, sources, warnings, regions, channels
         primary = self.primary(config)
         # Keep raw input intact at the initial revision. After removal/correction,
         # query.raw_query is regenerated from ACTIVE conditions by the controller.
@@ -104,8 +132,13 @@ class Recall:
                     if stopped():
                         break
                     vector = self.vector(provider, version, value)
-                    ids, hits = self.rank_vectors(rows, vector, limit)
+                    ids, hits, raw_scores = self.rank_vectors(rows, vector, limit, with_scores=True)
                     add(f"{family}：" + ("原文" if i == 0 else "条件" if i == 1 else "放松猜测"), family, ids)
+                    if channels and family == "primary" and i == 0 and ids:
+                        values = sorted(raw_scores.values(), reverse=True)
+                        channels[-1]["existence_signal"] = {"primary_top1": values[0],
+                            "primary_gap1_10": values[0] - values[9] if len(values) >= 10 else None,
+                            "provider": config["primary"]}
                     regions.update({aid: box for aid, box in hits.items() if aid not in regions})
                 ref = query.get("reference")
                 if ref and not stopped():
@@ -142,10 +175,14 @@ class Recall:
                 pass
             except Exception as exc:
                 warnings.append("描述语义：" + str(exc)[:160])
-        for c in query["conditions"]:
-            years = re.findall(r"(?<!\d)(?:19|20)\d{2}(?!\d)", c["label"])
-            if years:
-                add("拍摄日期线索", "metadata", [a["id"] for a in assets if a.get("captured") and a["captured"][:4] in years][:limit])
+        # Within each metadata bucket keep visual relevance; do not rank a month
+        # of unrelated photos in arbitrary database order ahead of matching content.
+        visual_order = fuse(channels, len(assets))[0]
+        metadata_order = visual_order + sorted({a["id"] for a in assets} - set(visual_order))
+        if place_ids is not None:
+            add("拍摄地点", "metadata_place", [aid for aid in metadata_order if aid in place_ids])
+        if time_ids is not None:
+            add("拍摄日期", "metadata_time", [aid for aid in metadata_order if aid in time_ids])
         # User named identities have independent provenance; clustering alone
         # never turns a guessed name into an identity.
         if assets:
@@ -158,6 +195,9 @@ class Recall:
                     ids = [r[0] for r in con.execute("""SELECT DISTINCT f.asset_id FROM flow_faces f JOIN assets a
                         ON a.id=f.asset_id AND a.fingerprint=f.fingerprint WHERE a.library_id=? AND f.person_id=?""", (assets[0]["library_id"], pid))]
                     add("用户命名人物", "people", ids[:limit])
+        for name, ids in getattr(self, 'oracle_people', {}).items():
+            if name in text:
+                add('ORACLE 人物（验证答案命名）', 'people', ids)
         excluded = set(query.get("excluded", []))
         allowed = {a["id"] for a in assets} - excluded
         for channel in channels:

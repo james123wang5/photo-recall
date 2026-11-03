@@ -2,3 +2,6 @@ fastapi>=0.115,<1
 uvicorn>=0.30,<1
 Pillow>=10,<13
 numpy>=1.26,<3
+
+# GPS / offline Chinese administrative polygons / fixed holiday table use stdlib.
+# Explicit data preparation (no runtime downloads): scripts/prepare_geography.py

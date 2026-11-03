@@ -17,6 +17,7 @@ DEFAULTS = {
     "recall_limit": 200, "recovery_limit": 1000, "verify_budget": 4,
     "rerank_budget": 24, "time_slice": 60, "collection_batch": 8,
     "max_recoveries": 2, "max_pixels": 262144,
+    "fusion_weights": {"primary": 1.0, "siglip": 0.1, "metadata_place": 1.0, "metadata_time": 1.0},
     "people_enabled": False, "grounding_enabled": False,
 }
 

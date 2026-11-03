@@ -2,6 +2,13 @@
 
 Dates from the project's docs / 日期来自项目文档。
 
+## Unreleased — 2026-11-03 · First benchmark runs and pipeline fixes
+- Public-benchmark harness `scripts/eval_retrieval.py` (PhotoBench, Flickr1k, NegBench, ChatIR, CountBench, DOCCI, CIRCO, DISBench adapters; per-channel ranks, existence signal / AUROC, per-stage index timing) and offline fusion replay `scripts/replay_fusion.py`.
+- Configurable per-family fusion weights; default SigLIP weight 0.1 (WeMM 1.0).
+- Offline GPS → administrative-region channel and Chinese date/holiday/season parsing (`app/metadata.py`); boundary data is prepared locally by `scripts/prepare_geography.py` and is not committed.
+- Optional resident models (`PHOTORECALL_KEEP_MODELS=1`), order-independent face grouping, ORACLE people upper-bound switch (answer leakage, off by default).
+- Recall stage, visual index only, PhotoBench validation (100 queries per album): hit@1 0.755 / 0.833 / 0.674 on albums 1–3 (album 1 was 0.447 before), about 1 s per query. Full pipeline (verify / rerank / OCR / multi-turn) not yet benchmarked; people and landmark search remain weak and are paused pending research.
+
 ## v0.6.0 — 2026-10-27 · Full search pipeline
 - New `app/flow/`: file scan → layered index → multi-channel recall → keep candidates → on-demand rerank / original-image verification → bounded expansion → user feedback.
 - Independent `flow_*` tables; old index and photos untouched. Collection tasks with coverage ledger.
